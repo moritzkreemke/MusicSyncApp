@@ -9,3 +9,4 @@ dependencyResolutionManagement {
 rootProject.name = "MusicSyncApp"
 include ':app'
 include ':musicsynclib'
+include ':musicsyncappAndroid'

@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.7">
       <module name="MusicSyncApp.app" target="11" />
+      <module name="MusicSyncApp.musicsyncappAndroid" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
