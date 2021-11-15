@@ -1,4 +1,4 @@
-package com.moritz.musicsyncapp;
+package com.moritz.musicsyncapp.views;
 
 import android.os.Bundle;
 
@@ -13,6 +13,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.moritz.musicsyncapp.R;
 import com.moritz.musicsyncapp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {

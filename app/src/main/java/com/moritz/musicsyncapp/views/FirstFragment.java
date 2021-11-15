@@ -1,4 +1,4 @@
-package com.moritz.musicsyncapp;
+package com.moritz.musicsyncapp.views;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.moritz.musicsyncapp.R;
 import com.moritz.musicsyncapp.databinding.FragmentFirstBinding;
 
 public class FirstFragment extends Fragment {
