@@ -15,8 +15,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class LocalPlaylistProvider implements IPlaylistProvider{
 
-
-
     private CharSequence path;
 
     public LocalPlaylistProvider(CharSequence path) {
