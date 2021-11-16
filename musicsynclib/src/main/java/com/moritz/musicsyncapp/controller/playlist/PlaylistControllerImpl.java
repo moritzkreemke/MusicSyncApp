@@ -1,7 +1,7 @@
 package com.moritz.musicsyncapp.controller.playlist;
 
 import com.moritz.musicsyncapp.model.playlist.IPlaylist;
-import com.moritz.musicsyncapp.model.playlist.IPlaylistProvider;
+import com.moritz.musicsyncapp.model.playlist.providers.IPlaylistProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
