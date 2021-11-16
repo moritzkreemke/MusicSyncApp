@@ -12,7 +12,7 @@
         <activity
             android:name=".LocalPlaylistActivity"
             android:exported="true"
-            android:label="@string/title_activity_local_playlist">
+            android:label="@string/title_activity_local_playlist" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
