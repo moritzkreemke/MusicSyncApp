@@ -1,7 +1,9 @@
 package com.moritz.musicsyncapp.controller.playlist;
 
 import com.moritz.musicsyncapp.model.playlist.IPlaylist;
+import com.moritz.musicsyncapp.model.playlist.providers.EProviderTypes;
 import com.moritz.musicsyncapp.model.playlist.providers.IPlaylistProvider;
+import com.moritz.musicsyncapp.model.playlist.providers.LocalPlaylistProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,29 +13,14 @@ import java.util.Map;
 
 public class PlaylistControllerImpl implements IPlaylistController {
 
-    private Map<String, IPlaylistProvider> providers;
-
-    public PlaylistControllerImpl ()
-    {
-        providers = new HashMap<>();
-    }
-
-    public void addProvider (String name, IPlaylistProvider provider)
-    {
-        providers.put(name, provider);
-    }
 
     @Override
-    public IPlaylist[] getAllPlaylists() {
-        List<IPlaylist> result = new ArrayList<>();
-        for (String provider : providers.keySet()) {
-            result.addAll(Arrays.asList(providers.get(provider).getAllPlaylists()));
+    public IPlaylist[] getPlaylist(CharSequence path, EProviderTypes type) {
+        if(type.equals(EProviderTypes.LOCAL)) {
+            IPlaylistProvider provider = new LocalPlaylistProvider(path);
+            return provider.getAllPlaylists();
+        } else {
+            return new IPlaylist[0];
         }
-        return result.toArray(new IPlaylist[result.size()]);
-    }
-
-    @Override
-    public IPlaylist[] getPlaylistByProvider(String provider) {
-        return providers.get(provider).getAllPlaylists();
     }
 }
