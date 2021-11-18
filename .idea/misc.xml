@@ -1,29 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.22135416666666666" />
-        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22135416666666666" />
-        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.22135416666666666" />
-        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/layout/activity_local_playlist.xml" value="0.22" />
-        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/layout/content_main.xml" value="0.1933876811594203" />
-        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/layout/fragment_dashboard.xml" value="0.1933876811594203" />
-        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/layout/fragment_first.xml" value="0.1933876811594203" />
-        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/layout/fragment_home.xml" value="0.1933876811594203" />
-        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/layout/fragment_notifications.xml" value="0.1933876811594203" />
-        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/layout/fragment_second.xml" value="0.1933876811594203" />
-        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.20520833333333333" />
-        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.22135416666666666" />
-        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.22135416666666666" />
-      </map>
-    </option>
-  </component>
-  <component name="FrameworkDetectionExcludesConfiguration">
-    <file type="web" url="file://$PROJECT_DIR$" />
-  </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_10" project-jdk-name="Android API 31 Platform" project-jdk-type="Android SDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
