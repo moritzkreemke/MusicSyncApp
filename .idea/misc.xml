@@ -1,9 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/ic_album_black_24dp.xml" value="0.21770833333333334" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/ic_baseline_album_24.xml" value="0.21770833333333334" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/ic_pause_black_24dp.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/ic_play_arrow_black_24dp.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/ic_signal_wifi_off_black_24dp.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/media_item_background.xml" value="0.23802083333333332" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/media_item_mask.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/media_overlay_background.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/layout/activity_main.xml" value="0.2015625" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/layout/fragment_blank.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/layout/fragment_dashboard.xml" value="0.2015625" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/layout/fragment_home.xml" value="0.2015625" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/layout/fragment_mediaitem.xml" value="0.6601671309192201" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/layout/fragment_notifications.xml" value="0.2015625" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/layout/fragment_track.xml" value="0.33" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/layout/local_playlist_fragment.xml" value="0.221875" />
+        <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.2015625" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.33" />
+      </ProjectState>
+    </option>
   </component>
 </project>

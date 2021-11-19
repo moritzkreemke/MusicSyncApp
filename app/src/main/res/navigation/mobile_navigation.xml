@@ -22,4 +22,9 @@
         android:name="com.moritz.musicsyncapp.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/local_playlist"
+        android:name="com.moritz.musicsyncapp.ui.localplaylist.LocalPlaylist"
+        android:label="local_playlist_fragment"
+        tools:layout="@layout/local_playlist_fragment" />
 </navigation>
