@@ -30,7 +30,7 @@ public class LocalPlaylist extends Fragment {
         mViewModel = new ViewModelProvider(this).get(LocalPlaylistViewModel.class);
 
         //Log.println(getContext().getApplicationContext().getCacheDir().getAbsolutePath())
-        new MusicSyncFactory().getPlaylistController().getPlaylist((CharSequence) getContext().getApplicationContext().getCacheDir().getAbsolutePath(), EProviderTypes.LOCAL);
+        //new MusicSyncFactory().getPlaylistController().getPlaylist((CharSequence) getContext().getApplicationContext().getCacheDir().getAbsolutePath(), EProviderTypes.LOCAL);
         return inflater.inflate(R.layout.local_playlist_fragment, container, false);
     }
 
