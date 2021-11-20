@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/MusicSyncApp.iml" filepath="$PROJECT_DIR$/.idea/modules/MusicSyncApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MusicSyncAndroid/MusicSyncApp.MusicSyncAndroid.iml" filepath="$PROJECT_DIR$/.idea/modules/MusicSyncAndroid/MusicSyncApp.MusicSyncAndroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/MusicSyncApp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/MusicSyncApp.app.iml" />
     </modules>
   </component>
