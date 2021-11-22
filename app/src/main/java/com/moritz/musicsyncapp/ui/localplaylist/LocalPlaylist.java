@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -39,8 +40,9 @@ public class LocalPlaylist extends Fragment {
         RecyclerView recyclerView = localPlaylistView.findViewById(R.id.recyclerView);
         PlaylistAdapter adapter = new PlaylistAdapter(getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setHasFixedSize(true);
+        //recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
+
         adapter.test();
         return localPlaylistView;
     }

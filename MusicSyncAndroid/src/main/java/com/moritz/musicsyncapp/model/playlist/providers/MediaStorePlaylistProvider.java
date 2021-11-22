@@ -69,7 +69,7 @@ public class MediaStorePlaylistProvider implements IPlaylistProvider{
                 String mimeType = cursor.getString(mimeTypeColumn);
 
                 Uri contentUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
-                System.out.println(name);
+
                 if(mimeType.equals("audio/x-wav")) {
                     LocalTrack localTrack = new LocalTrack(name, artist, contentUri.toString(), duration);
                     builder.addTrack(localTrack);

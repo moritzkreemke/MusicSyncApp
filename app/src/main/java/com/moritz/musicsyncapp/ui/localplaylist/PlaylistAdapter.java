@@ -37,6 +37,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         ITrack currentTrack = playlist.getTracks()[position];
         holder.textViewArtistTitle.setText(currentTrack.getArtist());
         holder.textViewSongTile.setText(currentTrack.getName());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("jo");
+            }
+        });
     }
 
     @Override

@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/TrackItem"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
     app:alignContent="stretch"
     app:alignItems="stretch"
-    app:flexWrap="wrap">
+    app:flexWrap="wrap"
+    android:focusable="true">
 
     <ImageView
         android:id="@+id/imageView"
