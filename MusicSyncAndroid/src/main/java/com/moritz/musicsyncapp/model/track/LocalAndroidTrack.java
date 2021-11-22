@@ -7,7 +7,7 @@ public class LocalAndroidTrack extends LocalTrack{
 
     public LocalAndroidTrack (@NonNull LocalTrack track)
     {
-        super(track.getName(), track.getArtist(), track.getUri());
+        super(track.getName(), track.getArtist(), track.getUri(), track.getDuration());
     }
 
     @Override
