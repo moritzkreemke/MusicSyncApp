@@ -17,12 +17,12 @@ public class PlaylistControllerAndroidImpl extends PlaylistControllerImpl {
 
     @Override
     public IPlaylist[] getPlaylistFromFilePath(CharSequence path) {
-        return PlaylistUtils.convertToAndroidPlaylist(super.getPlaylistFromFilePath(path));
+        return PlaylistUtils.convertToAndroidPlaylist(super.getPlaylistFromFilePath(path), context);
     }
 
     @Override
     public IPlaylist[] getSystemPlaylists() {
         IPlaylistProvider provider = new MediaStorePlaylistProvider(context);
-        return PlaylistUtils.convertToAndroidPlaylist(provider.getAllPlaylists());
+        return PlaylistUtils.convertToAndroidPlaylist(provider.getAllPlaylists(), context);
     }
 }

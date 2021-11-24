@@ -10,8 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.moritz.musicsyncapp.AndroidMusicSyncFactory;
+import com.moritz.musicsyncapp.MusicSyncAppApplication;
 import com.moritz.musicsyncapp.R;
 import com.moritz.musicsyncapp.model.playlist.IPlaylist;
+import com.moritz.musicsyncapp.model.track.IPlayableTrack;
 import com.moritz.musicsyncapp.model.track.ITrack;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     private IPlaylist playlist;
 
     public PlaylistAdapter(Context context) {
-        playlist = AndroidMusicSyncFactory.get(context).getPlaylistController().getSystemPlaylists()[0];
+        playlist = AndroidMusicSyncFactory.get().getPlaylistController().getSystemPlaylists()[0];
     }
 
     @NonNull
@@ -40,7 +42,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("jo");
+                AndroidMusicSyncFactory.get().getLocalSoundController().play((IPlayableTrack) currentTrack);
             }
         });
     }

@@ -18,7 +18,7 @@ public class LocalPlaylistViewModel extends AndroidViewModel {
 
     public LocalPlaylistViewModel(@NonNull Application application) {
         super(application);
-        playlist = AndroidMusicSyncFactory.get(application.getApplicationContext()).getPlaylistController().getSystemPlaylists()[0];
+        playlist = AndroidMusicSyncFactory.get().getPlaylistController().getSystemPlaylists()[0];
 
     }
 }
