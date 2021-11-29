@@ -9,6 +9,7 @@ import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,10 +26,13 @@ import com.moritz.musicsyncapp.MainActivity;
 import com.moritz.musicsyncapp.R;
 import com.moritz.musicsyncapp.controller.sound.ISoundController;
 import com.moritz.musicsyncapp.model.track.IPlayableTrack;
+import com.moritz.musicsyncapp.model.track.ITrack;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class MusicPlaybackService extends Service {
     public MusicPlaybackService() {
@@ -77,7 +81,7 @@ public class MusicPlaybackService extends Service {
      * Class used for the client Binder.  Because we know this service always
      * runs in the same process as its clients, we don't need to deal with IPC.
      */
-    public class LocalBinder extends Binder implements ISoundController {
+    public class LocalBinder extends Binder {
         public MusicPlaybackService getService() {
             // Return this instance of LocalService so clients can call public methods
             return MusicPlaybackService.this;
@@ -85,47 +89,48 @@ public class MusicPlaybackService extends Service {
 
         public void play (IPlayableTrack track)
         {
-            final int BUFFER_SIZE = 500000;
-            byte[] buffer = new byte[BUFFER_SIZE];
 
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                AudioTrack player = new AudioTrack.Builder()
-                        .setAudioAttributes(new AudioAttributes.Builder()
-                                .setUsage(AudioAttributes.USAGE_MEDIA)
-                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                                .build())
-                        .setAudioFormat(new AudioFormat.Builder()
-                                .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                                .setSampleRate(48000)
-                                .setChannelMask(AudioFormat.CHANNEL_OUT_STEREO)
-                                .build())
-                        .setBufferSizeInBytes(BUFFER_SIZE)
-                        .setTransferMode(AudioTrack.MODE_STREAM)
-                        .build();
+            Executor executor = Executors.newSingleThreadExecutor();
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    final int BUFFER_SIZE = 500000;
+                    byte[] buffer = new byte[BUFFER_SIZE];
+
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        AudioTrack player = new AudioTrack.Builder()
+                                .setAudioAttributes(new AudioAttributes.Builder()
+                                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                        .build())
+                                .setAudioFormat(new AudioFormat.Builder()
+                                        .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                                        .setSampleRate(48000)
+                                        .setChannelMask(AudioFormat.CHANNEL_OUT_STEREO)
+                                        .build())
+                                .setBufferSizeInBytes(BUFFER_SIZE)
+                                .setTransferMode(AudioTrack.MODE_STREAM)
+                                .build();
 
 
-                int i = 0;
-              player.play();
-                    try {
-                        InputStream stream = track.getStream();
-                        while (((i = stream.read(buffer)) != -1)) {
-                            player.write(buffer, 0, i);
+                        int i = 0;
+                        player.play();
+                        try {
+                            InputStream stream = track.getStream();
+                            while (((i = stream.read(buffer)) != -1)) {
+                                player.write(buffer, 0, i);
+                            }
+                            stream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                        stream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+
                     }
-
-
-
-            }
+                }
+            });
 
         }
 
-        @Override
-        public void stop() {
-
-        }
     }
 
 

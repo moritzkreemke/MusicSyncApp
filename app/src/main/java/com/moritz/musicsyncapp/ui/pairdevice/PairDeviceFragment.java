@@ -1,4 +1,4 @@
-package com.moritz.musicsyncapp.ui.mediacontroller;
+package com.moritz.musicsyncapp.ui.pairdevice;
 
 import android.os.Bundle;
 
@@ -7,19 +7,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.moritz.musicsyncapp.AndroidMusicSyncFactory;
 import com.moritz.musicsyncapp.R;
-import com.moritz.musicsyncapp.controller.sound.events.ISoundControllerOnTrackPlayEvent;
-import com.moritz.musicsyncapp.model.track.ITrack;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MediaControllerFragment#newInstance} factory method to
+ * Use the {@link PairDeviceFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MediaControllerFragment extends Fragment {
+public class PairDeviceFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,7 +26,7 @@ public class MediaControllerFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public MediaControllerFragment() {
+    public PairDeviceFragment() {
         // Required empty public constructor
     }
 
@@ -40,11 +36,11 @@ public class MediaControllerFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MediaControllerFragment.
+     * @return A new instance of fragment PairDeviceFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MediaControllerFragment newInstance(String param1, String param2) {
-        MediaControllerFragment fragment = new MediaControllerFragment();
+    public static PairDeviceFragment newInstance(String param1, String param2) {
+        PairDeviceFragment fragment = new PairDeviceFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -55,7 +51,6 @@ public class MediaControllerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -66,14 +61,6 @@ public class MediaControllerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_media_controller, container, false);
-        AndroidMusicSyncFactory.get().getLocalSoundController().addOnTrackPlayEvent(new ISoundControllerOnTrackPlayEvent() {
-            @Override
-            public void onTrackPlayEvent(ITrack iTrack) {
-                TextView textView = view.findViewById(R.id.textView);
-                textView.setText(iTrack.getName());
-            }
-        });
-        return view;
+        return inflater.inflate(R.layout.fragment_pair_device, container, false);
     }
 }

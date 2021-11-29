@@ -25,7 +25,7 @@ import com.moritz.musicsyncapp.R;
 
 public class LocalPlaylist extends Fragment {
 
-    //private LocalPlaylistViewModel mViewModel;
+    private LocalPlaylistViewModel mViewModel;
 
 
     @Override
@@ -33,7 +33,7 @@ public class LocalPlaylist extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
-       // mViewModel = new ViewModelProvider(this).get(LocalPlaylistViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(LocalPlaylistViewModel.class);
 
         View localPlaylistView = inflater.inflate(R.layout.local_playlist_fragment, container, false);
 
@@ -42,6 +42,7 @@ public class LocalPlaylist extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         //recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
+
 
         adapter.test();
         return localPlaylistView;

@@ -1,26 +1,63 @@
 package com.moritz.musicsyncapp.controller.sound;
 
-import android.app.Service;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 
+import com.moritz.musicsyncapp.AndroidMusicSyncFactory;
 import com.moritz.musicsyncapp.model.track.IPlayableTrack;
 import com.moritz.musicsyncapp.services.MusicPlaybackService;
 
-public class LocalSoundController implements ISoundController{
+public class LocalSoundController extends SoundControllerBase{
 
 
-   private MusicPlaybackService.LocalBinder localBinder;
+    MusicPlaybackService mService;
+    boolean mBound = false;
+    private MusicPlaybackService.LocalBinder binder;
+    private Intent serviceIntent = null;
 
-    public LocalSoundController(MusicPlaybackService.LocalBinder localBinder) {
-        this.localBinder = localBinder;
+   private Context context;
+
+    public LocalSoundController(Context context) {
+        this.context = context;
+        serviceIntent = new Intent(context, MusicPlaybackService.class);
+        context.bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     public void play(IPlayableTrack iTrack) {
-        localBinder.play(iTrack);
+        super.play(iTrack);
+        context.startService(serviceIntent);
+        //todo not the best approach
+        if(!mBound)
+            System.out.println("shit I should care about that");
+        binder.play(iTrack);
     }
 
     @Override
     public void stop() {
-
+        context.stopService(serviceIntent);
     }
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private ServiceConnection connection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            binder = (MusicPlaybackService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 }

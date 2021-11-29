@@ -41,14 +41,15 @@ public class AndroidMusicSyncFactory implements IAndroidSyncFactory{
         return new PlaylistControllerAndroidImpl(context);
     }
 
-    @Override
-    public void setLocalSoundController(ISoundController localSoundController) {
-        this.localSoundController = localSoundController;
+    public static void registerSoundController (ISoundController soundController)
+    {
+        get().localSoundController = soundController;
     }
 
     @Nullable
     @Override
     public ISoundController getLocalSoundController() {
+
         return localSoundController;
     }
 }

@@ -14,11 +14,8 @@ import java.util.List;
 
 public class LocalPlaylistViewModel extends AndroidViewModel {
 
-    private IPlaylist playlist;
 
     public LocalPlaylistViewModel(@NonNull Application application) {
         super(application);
-        playlist = AndroidMusicSyncFactory.get().getPlaylistController().getSystemPlaylists()[0];
-
     }
 }

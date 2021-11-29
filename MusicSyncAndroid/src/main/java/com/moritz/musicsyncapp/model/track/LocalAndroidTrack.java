@@ -25,6 +25,7 @@ public class LocalAndroidTrack extends LocalTrack{
     public int getDuration() {
         int duration = super.getDuration();
         if(duration == -1) {
+            //TODO something more meaningful xD
             return 5;
         } else {
             return duration;
