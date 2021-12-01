@@ -29,15 +29,18 @@
         <entry key="app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.20677083333333332" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.20677083333333332" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/fragment_available_device.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_media_controller.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.19791666666666666" />
-        <entry key="app/src/main/res/layout/fragment_pair_device.xml" value="0.190625" />
+        <entry key="app/src/main/res/layout/fragment_pair_device.xml" value="0.18" />
         <entry key="app/src/main/res/layout/fragment_pair_devices.xml" value="0.190625" />
+        <entry key="app/src/main/res/layout/fragment_session_playlist.xml" value="0.190625" />
         <entry key="app/src/main/res/layout/fragment_track.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/local_playlist_fragment.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/test.xml" value="0.19791666666666666" />
+        <entry key="app/src/main/res/layout/tmplyout.xml" value="0.23385416666666667" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.35572916666666665" />
       </map>
     </option>

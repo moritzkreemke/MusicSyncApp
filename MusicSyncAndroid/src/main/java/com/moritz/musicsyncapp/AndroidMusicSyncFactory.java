@@ -4,6 +4,8 @@ import android.content.Context;
 
 import androidx.annotation.Nullable;
 
+import com.moritz.musicsyncapp.controller.p2pnetwork.IP2PNetworkController;
+import com.moritz.musicsyncapp.controller.p2pnetwork.WifiDirectControllerAndroid;
 import com.moritz.musicsyncapp.controller.playlist.IPlaylistController;
 import com.moritz.musicsyncapp.controller.playlist.PlaylistControllerAndroidImpl;
 import com.moritz.musicsyncapp.controller.sound.ISoundController;
@@ -30,6 +32,7 @@ public class AndroidMusicSyncFactory implements IAndroidSyncFactory{
 
     private Context context;
     private ISoundController localSoundController;
+    private IP2PNetworkController networkController;
 
     private AndroidMusicSyncFactory (Context context)
     {
@@ -51,5 +54,12 @@ public class AndroidMusicSyncFactory implements IAndroidSyncFactory{
     public ISoundController getLocalSoundController() {
 
         return localSoundController;
+    }
+
+    @Override
+    public IP2PNetworkController getNetworkController(String s) {
+        if(networkController == null)
+            networkController = new WifiDirectControllerAndroid(context);
+        return networkController;
     }
 }

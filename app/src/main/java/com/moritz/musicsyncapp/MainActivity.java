@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -34,12 +35,13 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-               R.id.pair_devices, R.id.local_playlist)
+               R.id.pair_devices, R.id.session_playlist, R.id.local_playlist)
                 .build();
+
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController);
+        NavigationUI.setupWithNavController(navView, navController);
     }
 
 }

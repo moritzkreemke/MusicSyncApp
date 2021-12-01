@@ -2,7 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/pairDevicesFragment">
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/pair_devices">
 
     <fragment
         android:id="@+id/local_playlist"
@@ -10,8 +11,13 @@
         android:label="local_playlist_fragment"
         tools:layout="@layout/local_playlist_fragment" />
     <fragment
-        android:id="@+id/pairDevicesFragment"
+        android:id="@+id/pair_devices"
         android:name="com.moritz.musicsyncapp.ui.pairdevice.PairDeviceFragment"
         android:label="fragment_pair_devices"
         tools:layout="@layout/fragment_pair_device" />
+    <fragment
+        android:id="@+id/session_playlist"
+        android:name="com.moritz.musicsyncapp.ui.sessionplaylist.SessionPlaylistFragment"
+        android:label="fragment_session_playlist"
+        tools:layout="@layout/fragment_session_playlist" />
 </navigation>

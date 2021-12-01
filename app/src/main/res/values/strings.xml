@@ -6,4 +6,6 @@
     <string name="title_localplaylist">LocalPlaylist</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pairdevices">pairdevices</string>
+    <string name="sessionplaylist">SessionPlaylist</string>
 </resources>
