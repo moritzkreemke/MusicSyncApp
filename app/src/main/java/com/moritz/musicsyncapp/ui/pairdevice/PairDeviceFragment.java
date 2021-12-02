@@ -14,6 +14,9 @@ import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,13 +32,7 @@ import com.moritz.musicsyncapp.R;
  */
 public class PairDeviceFragment extends Fragment {
 
-
-    WifiP2pManager manager;
-    WifiP2pManager.Channel channel;
-    BroadcastReceiver receiver;
-    IntentFilter intentFilter;
-
-
+    private PairDeviceViewModel viewModel;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -43,7 +40,16 @@ public class PairDeviceFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pair_device, container, false);
-        AndroidMusicSyncFactory.get().getNetworkController(null);
+
+        viewModel = new ViewModelProvider(this).get(PairDeviceViewModel.class);
+
+        RecyclerView availableDevicesRV = view.findViewById(R.id.rVAvailableDevices);
+        AvailableDevicesAdapter adapter = new AvailableDevicesAdapter();
+        availableDevicesRV.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        availableDevicesRV.setAdapter(adapter);
+        AndroidMusicSyncFactory.get().getNetworkController(null).discoverDevices();
+        //AndroidMusicSyncFactory.get().getNetworkController(null);
         //getActivity().requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
         return view;

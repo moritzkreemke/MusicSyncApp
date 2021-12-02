@@ -2,6 +2,8 @@ package com.moritz.musicsyncapp.model.device;
 
 import android.net.wifi.p2p.WifiP2pDevice;
 
+import androidx.annotation.Nullable;
+
 public class WifiDirectDevice implements IDevice{
 
     private WifiP2pDevice device;
@@ -12,11 +14,20 @@ public class WifiDirectDevice implements IDevice{
 
     @Override
     public String getID() {
-        return null;
+        return device.deviceAddress;
     }
 
     @Override
     public String getDisplayName() {
-        return null;
+        return device.deviceName;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(obj instanceof IDevice) {
+            return getID().equals(((IDevice) obj).getID());
+        } else {
+            return false;
+        }
     }
 }
