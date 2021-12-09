@@ -8,22 +8,26 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class WifiDirectClient implements IClient{
-    private String inetAddress;
+
     private IDevice device;
+    private InputStream inputStream;
+    private OutputStream outputStream;
+    private OnMessageRecivedEvent recivedEvent;
 
 
-    public WifiDirectClient(String inetAddress, IDevice device) {
-        this.inetAddress = inetAddress;
+    public WifiDirectClient(IDevice device, InputStream inputStream, OutputStream outputStream, OnMessageRecivedEvent recivedEvent) {
         this.device = device;
-    }
-
-    @Override
-    public String getAddress() {
-        return inetAddress;
+        this.inputStream = inputStream;
+        this.outputStream = outputStream;
+        this.recivedEvent = recivedEvent;
     }
 
     @Override
     public IDevice getDevice() {
         return device;
+    }
+
+    public interface OnMessageRecivedEvent {
+        void onRevive (String messageRaw);
     }
 }

@@ -23,6 +23,15 @@ public class WifiDirectDevice implements IDevice{
     }
 
     @Override
+    public int getStatus() {
+        return device.status;
+    }
+
+    public WifiP2pDevice getNativeDevice() {
+        return device;
+    }
+
+    @Override
     public boolean equals(@Nullable Object obj) {
         if(obj instanceof IDevice) {
             return getID().equals(((IDevice) obj).getID());
@@ -30,4 +39,5 @@ public class WifiDirectDevice implements IDevice{
             return false;
         }
     }
+
 }

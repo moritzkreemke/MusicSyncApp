@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +25,13 @@ import android.view.ViewGroup;
 
 import com.moritz.musicsyncapp.AndroidMusicSyncFactory;
 import com.moritz.musicsyncapp.R;
+
+import com.moritz.musicsyncapp.controller.p2pnetwork.events.P2PNetworkControllerDevicesFoundEvent;
+import com.moritz.musicsyncapp.controller.p2pnetwork.events.P2PNetworkControllerDiscoverDevicesEvent;
+import com.moritz.musicsyncapp.model.device.IDevice;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -43,12 +51,44 @@ public class PairDeviceFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(PairDeviceViewModel.class);
 
+
         RecyclerView availableDevicesRV = view.findViewById(R.id.rVAvailableDevices);
-        AvailableDevicesAdapter adapter = new AvailableDevicesAdapter();
+        AvailableDevicesAdapter adapterAvailableDevices = new AvailableDevicesAdapter();
+        availableDevicesRV.setAdapter(adapterAvailableDevices);
         availableDevicesRV.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        availableDevicesRV.setAdapter(adapter);
-        AndroidMusicSyncFactory.get().getNetworkController(null).discoverDevices();
+        RecyclerView connectedDevicesRV = view.findViewById(R.id.rVConnectedDevicesPairDevice);
+        ConnectedDevicesAdapter connectedDevicesAdapter = new ConnectedDevicesAdapter();
+        connectedDevicesRV.setAdapter(connectedDevicesAdapter);
+        connectedDevicesRV.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        AndroidMusicSyncFactory.get().getNetworkController(null).discoverDevices(new P2PNetworkControllerDiscoverDevicesEvent() {
+            @Override
+            public void onDevicesFound(IDevice[] iDevices) {
+                List<IDevice> connected = new ArrayList<>();
+                List<IDevice> others = new ArrayList<>();
+
+                for (IDevice iDevice : iDevices) {
+                    if(iDevice.getStatus() == WifiP2pDevice.CONNECTED)
+                        connected.add(iDevice);
+                    else
+                        others.add(iDevice);
+                }
+
+                connectedDevicesAdapter.setDevices(connected.toArray(new IDevice[connected.size()]));
+                adapterAvailableDevices.setDevices(others.toArray(new IDevice[others.size()]));
+            }
+
+            @Override
+            public void onFailure(int i) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        }, true);
         //AndroidMusicSyncFactory.get().getNetworkController(null);
         //getActivity().requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 

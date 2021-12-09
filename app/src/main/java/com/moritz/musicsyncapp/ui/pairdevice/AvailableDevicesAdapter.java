@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.moritz.musicsyncapp.AndroidMusicSyncFactory;
 import com.moritz.musicsyncapp.R;
-import com.moritz.musicsyncapp.controller.p2pnetwork.events.IP2PNetworkControllerDevicesFoundChangedEvent;
+import com.moritz.musicsyncapp.controller.p2pnetwork.events.P2PNetworkControllerConnectingEvent;
 import com.moritz.musicsyncapp.model.device.IDevice;
 import com.moritz.musicsyncapp.ui.localplaylist.PlaylistAdapter;
 
@@ -22,13 +22,7 @@ public class AvailableDevicesAdapter extends RecyclerView.Adapter<AvailableDevic
     private IDevice[] devices = new IDevice[0];
 
     public AvailableDevicesAdapter() {
-        AndroidMusicSyncFactory.get().getNetworkController(null).addOnDevicesFoundChangeListener(new IP2PNetworkControllerDevicesFoundChangedEvent() {
-            @Override
-            public void onDevicesFound(IDevice[] iDevices) {
-                devices = iDevices;
-                notifyDataSetChanged();
-            }
-        });
+
     }
 
     @NonNull
@@ -45,9 +39,24 @@ public class AvailableDevicesAdapter extends RecyclerView.Adapter<AvailableDevic
         availableDevicesHolder.connectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidMusicSyncFactory.get().getNetworkController(null).connectDevice(devices[availableDevicesHolder.getAdapterPosition()]);
+                AndroidMusicSyncFactory.get().getNetworkController(null).connectDevice(devices[availableDevicesHolder.getAdapterPosition()], new P2PNetworkControllerConnectingEvent() {
+                    @Override
+                    public void onSuccessfulConnected() {
+                        System.out.println("connected");
+                    }
+
+                    @Override
+                    public void onFailure(int i) {
+
+                    }
+                });
             }
         });
+    }
+
+    public void setDevices(IDevice[] devices) {
+        this.devices = devices;
+        notifyDataSetChanged();
     }
 
     @Override
