@@ -12,74 +12,138 @@
     tools:context=".ui.pairdevice.PairDeviceFragment">
 
     <TextView
-        android:id="@+id/textViewSessionPairDevice"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
+        android:id="@+id/text_view_pair_devcices_header"
+        android:layout_width="58dp"
+        android:layout_height="19dp"
         android:layout_marginTop="16dp"
-        android:text="Session"
+        android:layout_marginBottom="16dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/btn_become_group_leader"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextSessionName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSessionPairDevice" />
-
     <Button
-        android:id="@+id/btnCreateSession"
+        android:id="@+id/btn_become_group_leader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="start"
+        android:text="becomeSessionowner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSessionName" />
+        app:layout_constraintTop_toBottomOf="@id/text_view_pair_devcices_header" />
+
+    <View
+        android:id="@+id/divider_1_pair_devices"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_become_group_leader" />
 
     <TextView
-        android:id="@+id/textViewConnectedDevicesPairDevice"
+        android:id="@+id/text_view_search_devices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Search Devices:"
+        app:layout_constraintEnd_toEndOf="@+id/text_view_decive_search_status"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider_1_pair_devices" />
+
+    <TextView
+        android:id="@+id/text_view_decive_search_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="unknown"
+        app:layout_constraintStart_toEndOf="@+id/text_view_search_devices"
+        app:layout_constraintTop_toBottomOf="@+id/divider_1_pair_devices" />
+
+    <ProgressBar
+        android:id="@+id/progressBar_search_devices"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toStartOf="@id/btn_restart_device_search"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_search_devices" />
+
+    <Button
+        android:id="@+id/btn_restart_device_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="r"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_search_devices"
+        app:layout_constraintStart_toEndOf="@id/progressBar_search_devices"
+        />
+
+    <View
+        android:id="@+id/divider_2_pair_devices"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_restart_device_search"
+        />
+
+    <TextView
+        android:id="@+id/text_view_connected_devices"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="connected devices"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCreateSession" />
+        app:layout_constraintTop_toBottomOf="@+id/divider_2_pair_devices" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rVConnectedDevicesPairDevice"
+        android:id="@+id/recycler_view_connected_devices"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewConnectedDevicesPairDevice" />
+        app:layout_constraintTop_toBottomOf="@+id/text_view_connected_devices">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <View
+        android:id="@+id/divider_3_pair_devices"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view_connected_devices" />
 
     <TextView
-        android:id="@+id/textViewavailbeDevicesPairDevice"
+        android:id="@+id/text_view_all_devices"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="availbe Devices"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rVConnectedDevicesPairDevice"
-        />
+        app:layout_constraintTop_toBottomOf="@id/divider_3_pair_devices" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rVAvailableDevices"
+        android:id="@+id/recyler_view_all_devices"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        app:layout_constraintTop_toBottomOf="@id/textViewavailbeDevicesPairDevice"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:listitem="@layout/fragment_available_device"
-        />
+        app:layout_constraintTop_toBottomOf="@id/text_view_all_devices"
+        tools:listitem="@layout/fragment_available_device" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

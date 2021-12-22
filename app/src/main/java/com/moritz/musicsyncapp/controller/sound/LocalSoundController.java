@@ -24,6 +24,7 @@ public class LocalSoundController extends SoundControllerBase{
         this.context = context;
         serviceIntent = new Intent(context, MusicPlaybackService.class);
         context.bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
+
     }
 
     @Override

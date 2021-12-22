@@ -58,7 +58,8 @@ public class MusicPlaybackService extends Service {
         super.onStartCommand(intent,flags,startId);
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+
 
         Notification notification = new NotificationCompat.Builder(this, Configuration.CHANNEL_ID)
                 .setContentTitle("Test")

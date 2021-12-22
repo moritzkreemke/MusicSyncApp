@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.moritz.musicsyncapp">
 
+    <application>
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+        <service
+            android:name="com.moritz.musicsyncapp.controller.p2pnetwork.services.CommuicationService"
+            android:enabled="true"
+            android:exported="true" />
+    </application>
+
+
 </manifest>

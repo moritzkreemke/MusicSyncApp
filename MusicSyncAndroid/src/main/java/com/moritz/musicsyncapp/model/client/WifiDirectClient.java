@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class WifiDirectClient implements IClient{
+public class WifiDirectClient implements IClient {
 
     private IDevice device;
     private InputStream inputStream;
@@ -22,9 +22,13 @@ public class WifiDirectClient implements IClient{
         this.recivedEvent = recivedEvent;
     }
 
-    @Override
     public IDevice getDevice() {
         return device;
+    }
+
+    @Override
+    public String getID() {
+        return device.getDisplayName();
     }
 
     public interface OnMessageRecivedEvent {

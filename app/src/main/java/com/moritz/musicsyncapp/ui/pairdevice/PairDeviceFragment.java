@@ -1,15 +1,6 @@
 package com.moritz.musicsyncapp.ui.pairdevice;
 
-import static android.os.Looper.getMainLooper;
-
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -26,7 +17,6 @@ import android.view.ViewGroup;
 import com.moritz.musicsyncapp.AndroidMusicSyncFactory;
 import com.moritz.musicsyncapp.R;
 
-import com.moritz.musicsyncapp.controller.p2pnetwork.events.P2PNetworkControllerDevicesFoundEvent;
 import com.moritz.musicsyncapp.controller.p2pnetwork.events.P2PNetworkControllerDiscoverDevicesEvent;
 import com.moritz.musicsyncapp.model.device.IDevice;
 
@@ -52,12 +42,12 @@ public class PairDeviceFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(PairDeviceViewModel.class);
 
 
-        RecyclerView availableDevicesRV = view.findViewById(R.id.rVAvailableDevices);
+        RecyclerView availableDevicesRV = view.findViewById(R.id.recyler_view_all_devices);
         AvailableDevicesAdapter adapterAvailableDevices = new AvailableDevicesAdapter();
         availableDevicesRV.setAdapter(adapterAvailableDevices);
         availableDevicesRV.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        RecyclerView connectedDevicesRV = view.findViewById(R.id.rVConnectedDevicesPairDevice);
+        RecyclerView connectedDevicesRV = view.findViewById(R.id.recycler_view_connected_devices);
         ConnectedDevicesAdapter connectedDevicesAdapter = new ConnectedDevicesAdapter();
         connectedDevicesRV.setAdapter(connectedDevicesAdapter);
         connectedDevicesRV.setLayoutManager(new LinearLayoutManager(getContext()));

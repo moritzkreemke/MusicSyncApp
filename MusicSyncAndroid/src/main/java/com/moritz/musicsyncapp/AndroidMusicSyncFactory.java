@@ -1,5 +1,7 @@
 package com.moritz.musicsyncapp;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 
 import androidx.annotation.Nullable;
@@ -12,6 +14,7 @@ import com.moritz.musicsyncapp.controller.sound.ISoundController;
 
 public class AndroidMusicSyncFactory implements IAndroidSyncFactory{
 
+    public static final String CHANNEL_ID = "Pair Notification Channel";
     private static AndroidMusicSyncFactory _instance;
 
 
@@ -37,6 +40,19 @@ public class AndroidMusicSyncFactory implements IAndroidSyncFactory{
     private AndroidMusicSyncFactory (Context context)
     {
         this.context = context;
+        createNoticationChannel();
+    }
+
+    private void createNoticationChannel ()
+    {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel serviceChannel = new NotificationChannel(CHANNEL_ID,
+                    "Test channel",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+
+            NotificationManager manager = context.getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(serviceChannel);
+        }
     }
 
     @Override
