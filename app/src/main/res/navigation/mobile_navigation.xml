@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/pair_devices">
+    app:startDestination="@id/local_playlist">
 
     <fragment
         android:id="@+id/local_playlist"

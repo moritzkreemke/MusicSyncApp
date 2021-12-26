@@ -8,19 +8,76 @@
     tools:context=".ui.device.AvailableDeviceFragment">
 
     <TextView
-        android:id="@+id/textView_devicename"
+        android:id="@+id/text_view_device_name_label_available_devices"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="device name"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Name:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btn_device_connect"
+    <TextView
+        android:id="@+id/text_view_device_name_value_available_devices"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="connect"
-        app:layout_constraintStart_toEndOf="@+id/textView_devicename"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="value"
+        app:layout_constraintStart_toEndOf="@+id/text_view_device_status_label_available_devices"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_view_device_status_label_available_devices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Status:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_device_name_label_available_devices" />
+
+    <TextView
+        android:id="@+id/text_view_device_status_value_available_devices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="value"
+        app:layout_constraintStart_toEndOf="@+id/text_view_device_status_label_available_devices"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_device_name_label_available_devices" />
+
+    <Button
+        android:id="@+id/btn_connect_to_device_available_devices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="connect"
+        app:layout_constraintBottom_toTopOf="@+id/text_view_device_status_label_available_devices"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_device_name_label_available_devices"
+         />
+
+    <Button
+        android:id="@+id/btn_cancel_connect_to_device_available_devices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="cancel"
+        app:layout_constraintBottom_toTopOf="@+id/text_view_device_status_label_available_devices"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_device_name_label_available_devices" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar_connecting_available_devices"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_device_status_value_available_devices" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

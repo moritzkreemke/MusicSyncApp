@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.246875" />
         <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/ic_album_black_24dp.xml" value="0.21770833333333334" />
         <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/ic_baseline_album_24.xml" value="0.21770833333333334" />
         <entry key="..\:/Users/moritz/AndroidStudioProjects/MusicSyncApp/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.22135416666666666" />
@@ -29,8 +30,8 @@
         <entry key="app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.20677083333333332" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.20677083333333332" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.18" />
-        <entry key="app/src/main/res/layout/fragment_available_device.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/fragment_connected_device.xml" value="0.22083333333333333" />
+        <entry key="app/src/main/res/layout/fragment_available_device.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_connected_device.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_media_controller.xml" value="0.33" />

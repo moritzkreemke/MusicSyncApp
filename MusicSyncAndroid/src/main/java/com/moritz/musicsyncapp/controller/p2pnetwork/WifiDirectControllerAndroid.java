@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -42,6 +43,10 @@ import java.util.List;
 public class WifiDirectControllerAndroid implements IP2PNetworkController {
 
     public static final String TAG = WifiDirectControllerAndroid.class.toString();
+    public static final String DEVICES_CHANGED_EVENT = "devices";
+    public static final String SESSION_CHANGED_EVENT = "session";
+    public static final String WIFI_STATE_CHANGED_EVENT = "wifi_state";
+    public static final String DISCOVERY_STATE_CHANGED_EVENT = "discovery_state";
 
     private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
     private Context context;
@@ -49,7 +54,6 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
     private WifiP2pManager.Channel channel;
     private WifiDirectBroadcastReciver receiver;
 
-    private P2PNetworkControllerDiscoverDevicesEvent p2PNetworkControllerDiscoverDevicesEvent;
     private ISession session;
 
     private IDevice deviceSelf;
@@ -60,7 +64,7 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
         DISABLED
     }
 
-    private enum E_DISCOVERY_STATES {
+    public enum E_DISCOVERY_STATES {
         RUNNING,
         STOPPED
     }
@@ -70,12 +74,16 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
 
     private CommuicationService.LocalBinder commuicationServivceBinder;
 
+    private IDevice[] devices;
+
 
     public WifiDirectControllerAndroid(Context context) {
         this.context = context;
         this.wifi_state = E_WIFI_STATES.UNDEFINED;
         this.discovery_state = E_DISCOVERY_STATES.STOPPED;
         setSession(SessionBuilder.get().build());
+        setDevices(new IDevice[0]);
+
 
         receiver = new WifiDirectBroadcastReciver();
         IntentFilter intentFilter = new IntentFilter();
@@ -125,7 +133,6 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
                 if (iSendableMessage.getMessage() instanceof AvailableClientsChanged) {
                     AvailableClientsChanged availableClientsChanged = (AvailableClientsChanged) iSendableMessage.getMessage();
                     setSession(SessionBuilder.get(session).setClients(availableClientsChanged.getClientList()).build());
-                    System.out.println("Session Count is: " + getSession().getClients().length);
                 }
             }
         });
@@ -144,55 +151,31 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
                 Log.d(TAG, "WIFI_P2P_STATE_CHANGED_ACTION triggered");
                 int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
                 if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
-                    wifi_state = E_WIFI_STATES.ENABLED;
+                    setWifi_state(E_WIFI_STATES.ENABLED);
                 } else {
-                    wifi_state = E_WIFI_STATES.DISABLED;
+                     setWifi_state(E_WIFI_STATES.DISABLED);
                 }
-
             } else if (WifiP2pManager.WIFI_P2P_DISCOVERY_CHANGED_ACTION.equals(action)) {
                 Log.d(TAG, "WIFI_P2P_DISCOVERY_CHANGED_ACTION trigged");
                 int extra = intent.getIntExtra(WifiP2pManager.EXTRA_DISCOVERY_STATE, -1);
                 if (extra == WifiP2pManager.WIFI_P2P_DISCOVERY_STARTED) {
-                    discovery_state = E_DISCOVERY_STATES.RUNNING;
+                    setDiscovery_state(E_DISCOVERY_STATES.RUNNING);
                 } else if (extra == WifiP2pManager.WIFI_P2P_DISCOVERY_STOPPED) {
-                    discovery_state = E_DISCOVERY_STATES.STOPPED;
-                    if (p2PNetworkControllerDiscoverDevicesEvent != null) {
-                        p2PNetworkControllerDiscoverDevicesEvent.onFinished();
-                        requestDevices(new P2PNetworkControllerDevicesFoundEvent() {
-                            @Override
-                            public void onDevicesFound(IDevice[] iDevices) {
-                                p2PNetworkControllerDiscoverDevicesEvent.onDevicesFound(iDevices);
-                            }
-                        });
-                    }
+                    setDiscovery_state(E_DISCOVERY_STATES.STOPPED);
                 }
             } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
                 // Call WifiP2pManager.requestPeers() to get a list of current peers
                 Log.d(TAG, "WIFI_P2P_PEERS_CHANGED_ACTION triggered");
                 WifiP2pDeviceList deviceList = intent.getParcelableExtra(WifiP2pManager.EXTRA_P2P_DEVICE_LIST);
-
-                if(p2PNetworkControllerDiscoverDevicesEvent != null) {
-                    List<IDevice> devices = new ArrayList<>();
-                    for (WifiP2pDevice device : deviceList.getDeviceList()) {
-                        devices.add(new WifiDirectDevice(device));
-                    }
-                    p2PNetworkControllerDiscoverDevicesEvent.onDevicesFound(devices.toArray(new IDevice[devices.size()]));
+                List<IDevice> ndevices = new ArrayList<>();
+                for (WifiP2pDevice device : deviceList.getDeviceList()) {
+                    ndevices.add(new WifiDirectDevice(device));
                 }
-
-                startCommuincation();
+                setDevices(ndevices.toArray(new IDevice[ndevices.size()]));
 
             } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
                 // Respond to new connection or disconnections
                 Log.d(TAG, "WIFI_P2P_CONNECTION_CHANGED_ACTION triggered");
-                if(p2PNetworkControllerDiscoverDevicesEvent != null) {
-                    requestDevices(new P2PNetworkControllerDevicesFoundEvent() {
-                        @Override
-                        public void onDevicesFound(IDevice[] iDevices) {
-                            p2PNetworkControllerDiscoverDevicesEvent.onDevicesFound(iDevices);
-                        }
-                    });
-                }
-
                 startCommuincation();
 
             } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
@@ -247,31 +230,16 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
 
     @SuppressLint("MissingPermission")
     @Override
-    public void discoverDevices(P2PNetworkControllerDiscoverDevicesEvent p2PNetworkControllerDiscoverDevicesEvent
-            , boolean trackChanges) {
-
-        if(trackChanges) {
-            this.p2PNetworkControllerDiscoverDevicesEvent = p2PNetworkControllerDiscoverDevicesEvent;
-        }
+    public void discoverDevices() {
 
         if(discovery_state.equals(E_DISCOVERY_STATES.RUNNING)) {
             Log.i(TAG, "skip Wifi Device discovery, already running");
             return;
         }
-
         manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                p2PNetworkControllerDiscoverDevicesEvent.onFinished();
-                discovery_state = E_DISCOVERY_STATES.STOPPED;
-                if(!trackChanges) {
-                    requestDevices(new P2PNetworkControllerDevicesFoundEvent() {
-                        @Override
-                        public void onDevicesFound(IDevice[] iDevices) {
-                            p2PNetworkControllerDiscoverDevicesEvent.onDevicesFound(iDevices);
-                        }
-                    });
-                }
+                setDiscovery_state(E_DISCOVERY_STATES.RUNNING);
             }
 
             @Override
@@ -283,36 +251,35 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
                 else if(i == WifiP2pManager.BUSY)
                     reason = "busy";
                 Log.d(TAG, "discovery devices failed, error code: " + i);
-                p2PNetworkControllerDiscoverDevicesEvent.onFailure(i);
-                discovery_state = E_DISCOVERY_STATES.STOPPED;
+                setDiscovery_state(E_DISCOVERY_STATES.STOPPED);
             }
         });
     }
 
-    @SuppressLint("MissingPermission")
-    @Override
-    public void requestDevices(P2PNetworkControllerDevicesFoundEvent devicesFoundEvent) {
-
-        manager.requestPeers(channel, new WifiP2pManager.PeerListListener() {
-            @Override
-            public void onPeersAvailable(WifiP2pDeviceList wifiP2pDeviceList) {
-                List<IDevice> devices = new ArrayList<>();
-                for (WifiP2pDevice device : wifiP2pDeviceList.getDeviceList()) {
-                    devices.add(new WifiDirectDevice(device));
-                }
-                devicesFoundEvent.onDevicesFound(devices.toArray(new IDevice[devices.size()]));
-            }
-        });
-    }
 
     @Override
     public void sendMessage(byte[] bytes, IClient iClient) {
 
     }
 
+    @Override
+    public void disconnect() {
+        manager.cancelConnect(channel, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFailure(int i) {
+
+            }
+        });
+    }
+
     @SuppressLint("MissingPermission")
     @Override
-    public void connectDevice(IDevice iDevice, P2PNetworkControllerConnectingEvent connectingEvent) {
+    public void connectDevice(IDevice iDevice) {
 
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = iDevice.getID();
@@ -324,17 +291,18 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
         manager.connect(channel, config, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                connectingEvent.onSuccessfulConnected();
+                //ignore it
             }
 
             @Override
             public void onFailure(int i) {
                 Log.d(this.getClass().toString(), "onFailure when connecting...");
-                connectingEvent.onFailure(i);
+
             }
         });
 
     }
+
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(listener);
@@ -346,16 +314,38 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
 
     private void setSession (ISession session)
     {
-        pcs.firePropertyChange("session", this.session, session);
+        pcs.firePropertyChange(SESSION_CHANGED_EVENT, this.session, session);
         this.session = session;
     }
     public ISession getSession ()
     {
-        return null;
+        return session;
     }
 
+    public E_DISCOVERY_STATES getDiscovery_state() {
+        return discovery_state;
+    }
+
+    private void setDiscovery_state(E_DISCOVERY_STATES discovery_state) {
+        pcs.firePropertyChange(DISCOVERY_STATE_CHANGED_EVENT, this.discovery_state, discovery_state);
+        this.discovery_state = discovery_state;
+    }
+
+    private void setWifi_state(E_WIFI_STATES wifi_state) {
+        pcs.firePropertyChange(WIFI_STATE_CHANGED_EVENT, this.wifi_state, wifi_state);
+        this.wifi_state = wifi_state;
+    }
     public E_WIFI_STATES getWifi_state() {
         return wifi_state;
+    }
+
+    private void setDevices (IDevice[] devices) {
+        pcs.firePropertyChange(DEVICES_CHANGED_EVENT, this.devices, devices);
+        this.devices = devices;
+    }
+    @Override
+    public IDevice[] getDevices() {
+        return devices;
     }
 
     public IDevice getDeviceSelf() {

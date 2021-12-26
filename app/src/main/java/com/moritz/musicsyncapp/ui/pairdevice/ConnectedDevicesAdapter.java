@@ -9,11 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.moritz.musicsyncapp.AndroidMusicSyncFactory;
 import com.moritz.musicsyncapp.R;
 import com.moritz.musicsyncapp.model.device.IDevice;
-
-import java.util.ArrayList;
 
 class ConnectedDevicesAdapter  extends RecyclerView.Adapter<ConnectedDevicesAdapter.ConnectedDevicesHolder> {
 
@@ -55,8 +52,8 @@ class ConnectedDevicesAdapter  extends RecyclerView.Adapter<ConnectedDevicesAdap
 
         public ConnectedDevicesHolder(@NonNull View itemView) {
             super(itemView);
-            deviceName = itemView.findViewById(R.id.textView_connectedDevices_devicename);
-            connectBtn = itemView.findViewById(R.id.btn_device_disconnect);
+            deviceName = itemView.findViewById(R.id.text_view_device_name_value_connected_devices);
+            connectBtn = itemView.findViewById(R.id.btn_device_disconnect_connected_devices);
         }
     }
 }

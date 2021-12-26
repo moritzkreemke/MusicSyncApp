@@ -1,9 +1,11 @@
 package com.moritz.musicsyncapp.ui.pairdevice;
 
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,9 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.moritz.musicsyncapp.AndroidMusicSyncFactory;
 import com.moritz.musicsyncapp.R;
+import com.moritz.musicsyncapp.controller.p2pnetwork.WifiDirectControllerAndroid;
 import com.moritz.musicsyncapp.controller.p2pnetwork.events.P2PNetworkControllerConnectingEvent;
+import com.moritz.musicsyncapp.controller.p2pnetwork.events.P2PNetworkControllerDevicesFoundEvent;
+import com.moritz.musicsyncapp.model.device.EWifiDirectStatusCodes;
 import com.moritz.musicsyncapp.model.device.IDevice;
-import com.moritz.musicsyncapp.ui.localplaylist.PlaylistAdapter;
 
 public class AvailableDevicesAdapter extends RecyclerView.Adapter<AvailableDevicesAdapter.AvailableDevicesHolder> {
 
@@ -36,20 +40,21 @@ public class AvailableDevicesAdapter extends RecyclerView.Adapter<AvailableDevic
     @Override
     public void onBindViewHolder(@NonNull AvailableDevicesHolder availableDevicesHolder, int i) {
         availableDevicesHolder.deviceName.setText(devices[i].getDisplayName());
+        availableDevicesHolder.deviceStatus.setText(EWifiDirectStatusCodes.valueOf(devices[i].getStatus()).toString());
+        availableDevicesHolder.progressBar.setVisibility(View.INVISIBLE);
+        availableDevicesHolder.cancelBtn.setVisibility(View.INVISIBLE);
+
         availableDevicesHolder.connectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidMusicSyncFactory.get().getNetworkController(null).connectDevice(devices[availableDevicesHolder.getAdapterPosition()], new P2PNetworkControllerConnectingEvent() {
-                    @Override
-                    public void onSuccessfulConnected() {
-                        System.out.println("connected");
-                    }
+                availableDevicesHolder.progressBar.setVisibility(View.VISIBLE);
+                availableDevicesHolder.progressBar.setIndeterminate(true);
+                availableDevicesHolder.connectBtn.setEnabled(false);
 
-                    @Override
-                    public void onFailure(int i) {
+                availableDevicesHolder.connectBtn.setVisibility(View.INVISIBLE);
+                availableDevicesHolder.cancelBtn.setVisibility(View.VISIBLE);
 
-                    }
-                });
+                AndroidMusicSyncFactory.get().getNetworkController(null).connectDevice(devices[availableDevicesHolder.getAdapterPosition()]);
             }
         });
     }
@@ -67,12 +72,18 @@ public class AvailableDevicesAdapter extends RecyclerView.Adapter<AvailableDevic
     static class AvailableDevicesHolder extends RecyclerView.ViewHolder {
 
         TextView deviceName;
+        TextView deviceStatus;
+        ProgressBar progressBar;
         Button connectBtn;
+        Button cancelBtn;
 
         public AvailableDevicesHolder(@NonNull View itemView) {
             super(itemView);
-            deviceName = itemView.findViewById(R.id.textView_devicename);
-            connectBtn = itemView.findViewById(R.id.btn_device_connect);
+            deviceName = itemView.findViewById(R.id.text_view_device_name_value_available_devices);
+            deviceStatus = itemView.findViewById(R.id.text_view_device_status_value_available_devices);
+            progressBar = itemView.findViewById(R.id.progress_bar_connecting_available_devices);
+            connectBtn = itemView.findViewById(R.id.btn_connect_to_device_available_devices);
+            cancelBtn = itemView.findViewById(R.id.btn_cancel_connect_to_device_available_devices);
         }
     }
 
