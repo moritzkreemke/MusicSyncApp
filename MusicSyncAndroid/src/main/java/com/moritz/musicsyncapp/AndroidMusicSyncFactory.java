@@ -6,17 +6,19 @@ import android.content.Context;
 
 import androidx.annotation.Nullable;
 
+import com.moritz.musicsyncapp.controller.commuication.client.ICommunicationClient;
+import com.moritz.musicsyncapp.controller.commuication.server.ICommunicationServer;
 import com.moritz.musicsyncapp.controller.p2pnetwork.IP2PNetworkController;
 import com.moritz.musicsyncapp.controller.p2pnetwork.WifiDirectControllerAndroid;
 import com.moritz.musicsyncapp.controller.playlist.IPlaylistController;
 import com.moritz.musicsyncapp.controller.playlist.PlaylistControllerAndroidImpl;
+import com.moritz.musicsyncapp.controller.session.ISessionController;
 import com.moritz.musicsyncapp.controller.sound.ISoundController;
 
 public class AndroidMusicSyncFactory implements IAndroidSyncFactory{
 
     public static final String CHANNEL_ID = "Pair Notification Channel";
     private static AndroidMusicSyncFactory _instance;
-
 
 
     public static AndroidMusicSyncFactory get ()
@@ -77,5 +79,20 @@ public class AndroidMusicSyncFactory implements IAndroidSyncFactory{
         if(networkController == null)
             networkController = new WifiDirectControllerAndroid(context);
         return networkController;
+    }
+
+    @Override
+    public ISessionController getSessionController() {
+        return MusicSyncFactory.getInstance().getSessionController();
+    }
+
+    @Override
+    public ICommunicationClient getCommuicationClient() {
+        return MusicSyncFactory.getInstance().getCommuicationClient();
+    }
+
+    @Override
+    public ICommunicationServer getCommuicationServer() {
+        return MusicSyncFactory.getInstance().getCommuicationServer();
     }
 }

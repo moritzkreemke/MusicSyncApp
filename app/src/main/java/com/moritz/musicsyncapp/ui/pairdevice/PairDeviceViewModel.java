@@ -19,6 +19,7 @@ public class PairDeviceViewModel extends ViewModel {
 
 
         private PropertyChangeListener pcs;
+        private PropertyChangeListener sessionChangeListener;
         private WifiDirectControllerAndroid wifiDirectControllerAndroid;
 
         private WifiDirectControllerAndroid.E_DISCOVERY_STATES discovery_state;
@@ -29,19 +30,23 @@ public class PairDeviceViewModel extends ViewModel {
 
                 this.wifiDirectControllerAndroid = (WifiDirectControllerAndroid) AndroidMusicSyncFactory.get().getNetworkController(null);
                 discovery_state = wifiDirectControllerAndroid.getDiscovery_state();
-                session = wifiDirectControllerAndroid.getSession();
                 devices = wifiDirectControllerAndroid.getDevices();
+                session = AndroidMusicSyncFactory.get().getSessionController().getSession();
 
                 pcs = evt -> {
                         if(evt.getPropertyName().equals(WifiDirectControllerAndroid.DISCOVERY_STATE_CHANGED_EVENT)) {
                                 discovery_state = (WifiDirectControllerAndroid.E_DISCOVERY_STATES) evt.getNewValue();
                         } else if(evt.getPropertyName().equals(WifiDirectControllerAndroid.DEVICES_CHANGED_EVENT)) {
                                 devices = (IDevice[]) evt.getNewValue();
-                        }  else if(evt.getPropertyName().equals(WifiDirectControllerAndroid.SESSION_CHANGED_EVENT)) {
+                        }
+                };
+                sessionChangeListener = new PropertyChangeListener() {
+                        @Override
+                        public void propertyChange(PropertyChangeEvent evt) {
                                 session = (ISession) evt.getNewValue();
                         }
                 };
-
+                AndroidMusicSyncFactory.get().getSessionController().addSessionChangeListener(sessionChangeListener);
                  wifiDirectControllerAndroid.addPropertyChangeListener(pcs);
         }
 
@@ -78,5 +83,6 @@ public class PairDeviceViewModel extends ViewModel {
         protected void onCleared() {
                 super.onCleared();
                 wifiDirectControllerAndroid.removePropertyChangeListener(pcs);
+                AndroidMusicSyncFactory.get().getSessionController().removeSessionChangeListener(sessionChangeListener);
         }
 }

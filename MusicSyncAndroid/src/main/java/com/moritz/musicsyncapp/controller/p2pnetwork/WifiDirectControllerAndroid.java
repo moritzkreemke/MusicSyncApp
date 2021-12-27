@@ -19,7 +19,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.moritz.musicsyncapp.controller.commuication.CommuicationFactory;
+import com.moritz.musicsyncapp.controller.commuication.client.CommunicationClientImpl;
 import com.moritz.musicsyncapp.controller.commuication.events.OnReciveMessageEvent;
 import com.moritz.musicsyncapp.controller.p2pnetwork.events.P2PNetworkControllerConnectingEvent;
 import com.moritz.musicsyncapp.controller.p2pnetwork.events.P2PNetworkControllerDevicesFoundEvent;
@@ -27,24 +27,22 @@ import com.moritz.musicsyncapp.controller.p2pnetwork.events.P2PNetworkController
 import com.moritz.musicsyncapp.controller.p2pnetwork.services.CommuicationService;
 import com.moritz.musicsyncapp.model.client.IClient;
 import com.moritz.musicsyncapp.model.commuication.ISendableMessage;
-import com.moritz.musicsyncapp.model.commuication.events.EventMessage;
 import com.moritz.musicsyncapp.model.commuication.messages.AvailableClientsChanged;
 import com.moritz.musicsyncapp.model.device.IDevice;
 import com.moritz.musicsyncapp.model.device.WifiDirectDevice;
 import com.moritz.musicsyncapp.model.session.ISession;
-import com.moritz.musicsyncapp.model.session.SessionBuilder;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 @SuppressLint("MissingPermission")
 public class WifiDirectControllerAndroid implements IP2PNetworkController {
 
     public static final String TAG = WifiDirectControllerAndroid.class.toString();
     public static final String DEVICES_CHANGED_EVENT = "devices";
-    public static final String SESSION_CHANGED_EVENT = "session";
     public static final String WIFI_STATE_CHANGED_EVENT = "wifi_state";
     public static final String DISCOVERY_STATE_CHANGED_EVENT = "discovery_state";
 
@@ -54,8 +52,7 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
     private WifiP2pManager.Channel channel;
     private WifiDirectBroadcastReciver receiver;
 
-    private ISession session;
-
+    private boolean isOwner;
     private IDevice deviceSelf;
 
     public enum E_WIFI_STATES {
@@ -81,7 +78,6 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
         this.context = context;
         this.wifi_state = E_WIFI_STATES.UNDEFINED;
         this.discovery_state = E_DISCOVERY_STATES.STOPPED;
-        setSession(SessionBuilder.get().build());
         setDevices(new IDevice[0]);
 
 
@@ -126,17 +122,6 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
                 startCommuincation();
             }
         });
-
-        CommuicationFactory.get().getClient().addOnReviveMessageListener(new OnReciveMessageEvent() {
-            @Override
-            public void onReceiveMessage(ISendableMessage iSendableMessage) {
-                if (iSendableMessage.getMessage() instanceof AvailableClientsChanged) {
-                    AvailableClientsChanged availableClientsChanged = (AvailableClientsChanged) iSendableMessage.getMessage();
-                    setSession(SessionBuilder.get(session).setClients(availableClientsChanged.getClientList()).build());
-                }
-            }
-        });
-
     }
 
     @SuppressLint("MissingPermission")
@@ -202,10 +187,10 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
 
                 if(info.isGroupOwner) {
                     startCommuicationService.putExtra(CommuicationService.COMMUICATION_SERVICE_IS_SERVER_EXTRA, true);
-                    setSession(SessionBuilder.get(session).setOwner(true).build());
+                    isOwner = true;
                 } else {
                     startCommuicationService.putExtra(CommuicationService.COMMUICATION_SERVICE_IS_SERVER_EXTRA, false);
-                    setSession(SessionBuilder.get(session).setOwner(false).build());
+                    isOwner = false;
                 }
                 startCommuicationService.putExtra(CommuicationService.TARGET_INET_ADDR_EXTRA, info.groupOwnerAddress.getHostAddress());
                 context.startService(startCommuicationService);
@@ -312,16 +297,6 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
         pcs.removePropertyChangeListener(listener);
     }
 
-    private void setSession (ISession session)
-    {
-        pcs.firePropertyChange(SESSION_CHANGED_EVENT, this.session, session);
-        this.session = session;
-    }
-    public ISession getSession ()
-    {
-        return session;
-    }
-
     public E_DISCOVERY_STATES getDiscovery_state() {
         return discovery_state;
     }
@@ -346,6 +321,11 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
     @Override
     public IDevice[] getDevices() {
         return devices;
+    }
+
+    @Override
+    public boolean isOwner() {
+        return isOwner;
     }
 
     public IDevice getDeviceSelf() {

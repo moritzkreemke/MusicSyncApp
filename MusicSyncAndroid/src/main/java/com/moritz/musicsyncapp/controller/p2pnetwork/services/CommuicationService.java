@@ -12,7 +12,6 @@ import androidx.core.app.NotificationCompat;
 
 import com.moritz.musicsyncapp.AndroidMusicSyncFactory;
 import com.moritz.musicsyncapp.R;
-import com.moritz.musicsyncapp.controller.commuication.CommuicationFactory;
 import com.moritz.musicsyncapp.controller.commuication.client.ICommunicationClient;
 import com.moritz.musicsyncapp.controller.commuication.events.OnConnectEvent;
 import com.moritz.musicsyncapp.controller.commuication.server.ICommunicationServer;
@@ -64,15 +63,15 @@ public class CommuicationService extends Service {
         boolean isServer = intent.getBooleanExtra(COMMUICATION_SERVICE_IS_SERVER_EXTRA, true);
 
         if(isServer) {
-            CommuicationFactory.get().getServer().start(8080);
+            AndroidMusicSyncFactory.get().getCommuicationServer().start(8080);
         }
 
         String inet =  intent.getStringExtra(TARGET_INET_ADDR_EXTRA);
         try {
-            CommuicationFactory.get().getClient().connect(InetAddress.getByName(inet), 8080, 10, UUID.randomUUID().toString(), new OnConnectEvent() {
+            AndroidMusicSyncFactory.get().getCommuicationClient().connect(InetAddress.getByName(inet), 8080, 10, UUID.randomUUID().toString(), new OnConnectEvent() {
                 @Override
                 public void success() {
-                    CommuicationFactory.get().getClient().sendMessage(EventMessage.EVENT_CLIENTS_UPDATED, IClient.EVENT);
+
                 }
 
                 @Override

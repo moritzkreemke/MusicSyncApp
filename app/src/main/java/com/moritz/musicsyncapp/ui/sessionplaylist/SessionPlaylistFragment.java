@@ -9,15 +9,27 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.moritz.musicsyncapp.AndroidMusicSyncFactory;
 import com.moritz.musicsyncapp.R;
 import com.moritz.musicsyncapp.model.playlist.IPlaylist;
+import com.moritz.musicsyncapp.model.session.ISession;
+import com.moritz.musicsyncapp.model.track.ITrack;
+import com.moritz.musicsyncapp.model.track.LocalAndroidTrack;
 import com.moritz.musicsyncapp.ui.selectsongs.SelectSongsActivity;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +39,7 @@ public class SessionPlaylistFragment extends Fragment {
 
 
 
+    private PropertyChangeListener sessionChanged;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,7 +52,13 @@ public class SessionPlaylistFragment extends Fragment {
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult o) {
-
+                        if(o.getResultCode() == SelectSongsActivity.SUCCESS_CODE) {
+                            String[] selectedTracks = o.getData().getStringArrayExtra(SelectSongsActivity.SELECT_SONGS_RESULT);
+                            for (int i = 0; i < selectedTracks.length; i++) {
+                                ITrack localTrack = LocalAndroidTrack.getByUri(selectedTracks[i], getContext());
+                                AndroidMusicSyncFactory.get().getSessionController().getSession().getSessionPlaylist().addTrack(localTrack);
+                            }
+                        }
                     }
                 });
         addSongsBtn.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +69,33 @@ public class SessionPlaylistFragment extends Fragment {
             }
         });
 
+        RecyclerView sessionSongsRV = view.findViewById(R.id.recycler_view_session_playlist_songs);
+        sessionSongsRV.setLayoutManager(new LinearLayoutManager(getContext()));
+        SessionPlaylistAdapter sessionPlaylistAdapter = new SessionPlaylistAdapter();
+        sessionSongsRV.setAdapter(sessionPlaylistAdapter);
+
+        sessionChanged = new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ISession session = (ISession) evt.getNewValue();
+                        sessionPlaylistAdapter.setTrackList(Arrays.asList(session.getSessionPlaylist().getTracks()));
+                    }
+                });
+
+            }
+        };
+        AndroidMusicSyncFactory.get().getSessionController().addSessionChangeListener(sessionChanged);
+
+        sessionPlaylistAdapter.setTrackList(Arrays.asList(AndroidMusicSyncFactory.get().getSessionController().getSession().getSessionPlaylist().getTracks()));
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        AndroidMusicSyncFactory.get().getSessionController().addSessionChangeListener(sessionChanged);
     }
 }

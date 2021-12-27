@@ -39,6 +39,9 @@
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/fragment_pair_device.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_pair_devices.xml" value="0.190625" />
+        <entry key="app/src/main/res/layout/fragment_select_track.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_select_track_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_session__playlist__track.xml" value="0.20364583333333333" />
         <entry key="app/src/main/res/layout/fragment_session_playlist.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_track.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/local_playlist_fragment.xml" value="0.19791666666666666" />

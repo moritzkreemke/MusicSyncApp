@@ -54,6 +54,7 @@ public class PairDeviceFragment extends Fragment {
     private WifiDirectControllerAndroid wifiDirectControllerAndroid;
 
     private PropertyChangeListener pcs;
+    private PropertyChangeListener sessionChanged;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -126,21 +127,6 @@ public class PairDeviceFragment extends Fragment {
                             }
                             connectedDevicesAdapter.setDevices(connected.toArray(new IDevice[connected.size()]));
                             adapterAvailableDevices.setDevices(otherDevices.toArray(new IDevice[otherDevices.size()]));
-                        }  else if(evt.getPropertyName().equals(WifiDirectControllerAndroid.SESSION_CHANGED_EVENT)) {
-                            ISession session = (ISession) evt.getNewValue();
-                            if(!session.exits()) {
-                                textView_header.setText("please connect to other devices");
-                                //changeGroupOwnerBtn.setEnabled(false);
-                            } else {
-
-                                if(session.isOwner()) {
-                                    textView_header.setText("you are the DJ");
-                                    changeGroupOwnerBtn.setEnabled(false);
-                                } else {
-                                    textView_header.setText("you are listener");
-                                    changeGroupOwnerBtn.setEnabled(true);
-                                }
-                            }
                         }
                     }
                 });
@@ -148,7 +134,33 @@ public class PairDeviceFragment extends Fragment {
             }
         };
 
+        sessionChanged = new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ISession session = (ISession) evt.getNewValue();
+                        if(!session.exits()) {
+                            textView_header.setText("please connect to other devices");
+                            //changeGroupOwnerBtn.setEnabled(false);
+                        } else {
+                            if(AndroidMusicSyncFactory.get().getNetworkController(null).isOwner()) {
+                                textView_header.setText("you are the DJ");
+                                changeGroupOwnerBtn.setEnabled(false);
+                            } else {
+                                textView_header.setText("you are listener");
+                                changeGroupOwnerBtn.setEnabled(true);
+                            }
+                        }
+                    }
+                });
+            }
+        };
+
+
         initValues();
+        AndroidMusicSyncFactory.get().getSessionController().addSessionChangeListener(sessionChanged);
         wifiDirectControllerAndroid.addPropertyChangeListener(pcs);
 
         AndroidMusicSyncFactory.get().getNetworkController(null).discoverDevices();
@@ -163,7 +175,7 @@ public class PairDeviceFragment extends Fragment {
             textView_header.setText("Please connect to other devices");
             changeGroupOwnerBtn.setEnabled(false);
         } else {
-            if (session.isOwner()) {
+            if (AndroidMusicSyncFactory.get().getNetworkController(null).isOwner()) {
                 textView_header.setText("you are the DJ");
                 changeGroupOwnerBtn.setEnabled(false);
             } else {
@@ -190,5 +202,6 @@ public class PairDeviceFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         wifiDirectControllerAndroid.removePropertyChangeListener(pcs);
+        AndroidMusicSyncFactory.get().getSessionController().removeSessionChangeListener(sessionChanged);
     }
 }
