@@ -1,7 +1,6 @@
 package com.moritz.musicsyncapp.ui.sessionplaylist;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -19,7 +18,6 @@ import android.view.ViewGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.moritz.musicsyncapp.AndroidMusicSyncFactory;
 import com.moritz.musicsyncapp.R;
-import com.moritz.musicsyncapp.model.playlist.IPlaylist;
 import com.moritz.musicsyncapp.model.session.ISession;
 import com.moritz.musicsyncapp.model.track.ITrack;
 import com.moritz.musicsyncapp.model.track.LocalAndroidTrack;
@@ -81,7 +79,16 @@ public class SessionPlaylistFragment extends Fragment {
                     @Override
                     public void run() {
                         ISession session = (ISession) evt.getNewValue();
-                        sessionPlaylistAdapter.setTrackList(Arrays.asList(session.getSessionPlaylist().getTracks()));
+                        List<ITrack> allTracks = new ArrayList<>();
+                        for (int i = 0; i < session.getSessionPlaylist().getTracks().length; i++) {
+                            LocalAndroidTrack localAndroidTrack = LocalAndroidTrack.getByUri(session.getSessionPlaylist().getTracks()[i].getUri(), getContext());
+                            if(localAndroidTrack != null) {
+                                allTracks.add(localAndroidTrack);
+                            } else {
+                                allTracks.add(session.getSessionPlaylist().getTracks()[i]);
+                            }
+                        }
+                        sessionPlaylistAdapter.setTrackList(allTracks);
                     }
                 });
 
@@ -90,6 +97,7 @@ public class SessionPlaylistFragment extends Fragment {
         AndroidMusicSyncFactory.get().getSessionController().addSessionChangeListener(sessionChanged);
 
         sessionPlaylistAdapter.setTrackList(Arrays.asList(AndroidMusicSyncFactory.get().getSessionController().getSession().getSessionPlaylist().getTracks()));
+
         return view;
     }
 

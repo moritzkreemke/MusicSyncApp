@@ -4,8 +4,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 
-import androidx.annotation.Nullable;
-
 import com.moritz.musicsyncapp.controller.commuication.client.ICommunicationClient;
 import com.moritz.musicsyncapp.controller.commuication.server.ICommunicationServer;
 import com.moritz.musicsyncapp.controller.p2pnetwork.IP2PNetworkController;
@@ -13,10 +11,16 @@ import com.moritz.musicsyncapp.controller.p2pnetwork.WifiDirectControllerAndroid
 import com.moritz.musicsyncapp.controller.playlist.IPlaylistController;
 import com.moritz.musicsyncapp.controller.playlist.PlaylistControllerAndroidImpl;
 import com.moritz.musicsyncapp.controller.session.ISessionController;
+import com.moritz.musicsyncapp.controller.snapdroid.ISnapdroidClient;
+import com.moritz.musicsyncapp.controller.snapdroid.client.AndroidSnapdroidClientImpl;
+import com.moritz.musicsyncapp.controller.snapdroid.server.AndroidSnapdroidServerImpl;
+import com.moritz.musicsyncapp.controller.snapdroid.ISnapdroidServer;
 import com.moritz.musicsyncapp.controller.sound.ISoundController;
+import com.moritz.musicsyncapp.controller.sound.LocalSoundController;
 
 public class AndroidMusicSyncFactory implements IAndroidSyncFactory{
 
+    public static final String MUSIC_PLAYER_CHANNEL_ID = "Music Player Channel ID";
     public static final String CHANNEL_ID = "Pair Notification Channel";
     private static AndroidMusicSyncFactory _instance;
 
@@ -36,7 +40,6 @@ public class AndroidMusicSyncFactory implements IAndroidSyncFactory{
     }
 
     private Context context;
-    private ISoundController localSoundController;
     private IP2PNetworkController networkController;
 
     private AndroidMusicSyncFactory (Context context)
@@ -54,6 +57,9 @@ public class AndroidMusicSyncFactory implements IAndroidSyncFactory{
 
             NotificationManager manager = context.getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);
+
+            NotificationChannel musicChannel = new NotificationChannel(MUSIC_PLAYER_CHANNEL_ID, "Music Player", NotificationManager.IMPORTANCE_DEFAULT);
+            manager.createNotificationChannel(musicChannel);
         }
     }
 
@@ -62,15 +68,12 @@ public class AndroidMusicSyncFactory implements IAndroidSyncFactory{
         return new PlaylistControllerAndroidImpl(context);
     }
 
-    public static void registerSoundController (ISoundController soundController)
-    {
-        get().localSoundController = soundController;
-    }
-
-    @Nullable
+    private ISoundController localSoundController;
     @Override
     public ISoundController getLocalSoundController() {
 
+        if(localSoundController == null)
+            localSoundController = new LocalSoundController(context);
         return localSoundController;
     }
 
@@ -94,5 +97,22 @@ public class AndroidMusicSyncFactory implements IAndroidSyncFactory{
     @Override
     public ICommunicationServer getCommuicationServer() {
         return MusicSyncFactory.getInstance().getCommuicationServer();
+    }
+
+    private ISnapdroidServer snapdroidServer;
+    @Override
+    public ISnapdroidServer getSnapdroidServer() {
+        if(snapdroidServer == null)
+            snapdroidServer = new AndroidSnapdroidServerImpl(context);
+        return snapdroidServer;
+    }
+
+    private ISnapdroidClient snapdroidClient;
+    @Override
+    public ISnapdroidClient getSnapdroidClient() {
+        if(snapdroidClient == null) {
+            snapdroidClient = new AndroidSnapdroidClientImpl(context);
+        }
+        return snapdroidClient;
     }
 }

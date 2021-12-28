@@ -8,6 +8,11 @@
             android:name="com.moritz.musicsyncapp.controller.p2pnetwork.services.CommuicationService"
             android:enabled="true"
             android:exported="true" />
+
+        <service
+            android:name=".controller.sound.services.MusicPlaybackService"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 

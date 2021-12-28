@@ -7,10 +7,10 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 
 import com.moritz.musicsyncapp.AndroidMusicSyncFactory;
+import com.moritz.musicsyncapp.controller.sound.services.MusicPlaybackService;
 import com.moritz.musicsyncapp.model.track.IPlayableTrack;
-import com.moritz.musicsyncapp.services.MusicPlaybackService;
 
-public class LocalSoundController extends SoundControllerBase{
+public class LocalSoundController extends SoundControllerBase {
 
 
     MusicPlaybackService mService;
@@ -24,7 +24,6 @@ public class LocalSoundController extends SoundControllerBase{
         this.context = context;
         serviceIntent = new Intent(context, MusicPlaybackService.class);
         context.bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
-
     }
 
     @Override

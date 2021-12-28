@@ -64,7 +64,9 @@ public class CommuicationService extends Service {
 
         if(isServer) {
             AndroidMusicSyncFactory.get().getCommuicationServer().start(8080);
+            AndroidMusicSyncFactory.get().getSnapdroidServer().start();
         }
+
 
         String inet =  intent.getStringExtra(TARGET_INET_ADDR_EXTRA);
         try {
@@ -79,9 +81,11 @@ public class CommuicationService extends Service {
 
                 }
             });
+            AndroidMusicSyncFactory.get().getSnapdroidClient().connect(InetAddress.getByName(inet), 1704, UUID.randomUUID().toString());
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
+
 
 
 

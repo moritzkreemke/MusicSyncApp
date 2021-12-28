@@ -268,6 +268,7 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
 
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = iDevice.getID();
+        config.wps.setup = WpsInfo.PBC;
 
         if(iDevice.getStatus() == WifiP2pDevice.CONNECTED) {
             return;

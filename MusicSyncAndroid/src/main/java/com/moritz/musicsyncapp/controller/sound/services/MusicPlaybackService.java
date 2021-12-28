@@ -1,36 +1,26 @@
-package com.moritz.musicsyncapp.services;
+package com.moritz.musicsyncapp.controller.sound.services;
 
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.media.AudioAttributes;
 import android.media.AudioFormat;
-import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.os.AsyncTask;
 import android.os.Binder;
-import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.media.MediaBrowserCompat;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import androidx.core.app.NotificationCompat;
-import androidx.media.MediaBrowserServiceCompat;
 
-import com.moritz.musicsyncapp.Configuration;
-import com.moritz.musicsyncapp.MainActivity;
+
+import com.moritz.musicsyncapp.AndroidMusicSyncFactory;
+
 import com.moritz.musicsyncapp.R;
-import com.moritz.musicsyncapp.controller.sound.ISoundController;
 import com.moritz.musicsyncapp.model.track.IPlayableTrack;
-import com.moritz.musicsyncapp.model.track.ITrack;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -57,15 +47,15 @@ public class MusicPlaybackService extends Service {
         //always when startService(Intent) is called
         super.onStartCommand(intent,flags,startId);
 
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+        //Intent notificationIntent = new Intent(this, MainActivity.class);
+        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
 
-        Notification notification = new NotificationCompat.Builder(this, Configuration.CHANNEL_ID)
+        Notification notification = new NotificationCompat.Builder(this, AndroidMusicSyncFactory.MUSIC_PLAYER_CHANNEL_ID)
                 .setContentTitle("Test")
                 .setContentText("Text")
-                .setSmallIcon(R.drawable.ic_dashboard_black_24dp)
-                .setContentIntent(pendingIntent)
+                .setSmallIcon(R.drawable.ic_android_black_24dp)
+              //  .setContentIntent(pendingIntent)
                 .build();
 
         startForeground(1, notification);
@@ -129,7 +119,6 @@ public class MusicPlaybackService extends Service {
                     }
                 }
             });
-
         }
 
     }
