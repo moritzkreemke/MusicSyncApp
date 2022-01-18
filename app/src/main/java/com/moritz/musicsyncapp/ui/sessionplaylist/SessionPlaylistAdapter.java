@@ -39,8 +39,10 @@ class SessionPlaylistAdapter extends RecyclerView.Adapter<SessionPlaylistAdapter
         sessionTracksHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(track instanceof IPlayableTrack) {
-                    AndroidMusicSyncFactory.get().getSnapdroidServer().playTrack((IPlayableTrack) track);
+                if(AndroidMusicSyncFactory.get().getNetworkController(null).isOwner()) {
+                    if(track instanceof IPlayableTrack) {
+                        AndroidMusicSyncFactory.get().getSnapdroidServer().playTrack((IPlayableTrack) track);
+                    }
                 }
             }
         });

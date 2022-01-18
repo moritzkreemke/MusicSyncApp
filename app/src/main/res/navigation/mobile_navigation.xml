@@ -8,16 +8,16 @@
     <fragment
         android:id="@+id/local_playlist"
         android:name="com.moritz.musicsyncapp.ui.localplaylist.LocalPlaylist"
-        android:label="local_playlist_fragment"
+        android:label="Your Songs"
         tools:layout="@layout/local_playlist_fragment" />
     <fragment
         android:id="@+id/pair_devices"
         android:name="com.moritz.musicsyncapp.ui.pairdevice.PairDeviceFragment"
-        android:label="fragment_pair_devices"
+        android:label="Pair Devices"
         tools:layout="@layout/fragment_pair_device" />
     <fragment
         android:id="@+id/session_playlist"
         android:name="com.moritz.musicsyncapp.ui.sessionplaylist.SessionPlaylistFragment"
-        android:label="fragment_session_playlist"
+        android:label="Shared Playlist"
         tools:layout="@layout/fragment_session_playlist" />
 </navigation>

@@ -15,7 +15,9 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.IBinder;
+import android.provider.Telephony;
 import android.util.Log;
+
 
 import androidx.annotation.Nullable;
 
@@ -38,6 +40,8 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
 @SuppressLint("MissingPermission")
 public class WifiDirectControllerAndroid implements IP2PNetworkController {
 
@@ -45,6 +49,7 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
     public static final String DEVICES_CHANGED_EVENT = "devices";
     public static final String WIFI_STATE_CHANGED_EVENT = "wifi_state";
     public static final String DISCOVERY_STATE_CHANGED_EVENT = "discovery_state";
+    public static final String OWNER_CHANGED_EVENT = "owner";
 
     private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
     private Context context;
@@ -173,7 +178,7 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
     }
 
 
-    private void startCommuincation ()
+    public void startCommuincation ()
     {
         WifiDirectControllerAndroid instance = this;
         manager.requestConnectionInfo(channel, new WifiP2pManager.ConnectionInfoListener() {
@@ -187,10 +192,10 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
 
                 if(info.isGroupOwner) {
                     startCommuicationService.putExtra(CommuicationService.COMMUICATION_SERVICE_IS_SERVER_EXTRA, true);
-                    isOwner = true;
+                   setOwner(true);
                 } else {
                     startCommuicationService.putExtra(CommuicationService.COMMUICATION_SERVICE_IS_SERVER_EXTRA, false);
-                    isOwner = false;
+                    setOwner(false);
                 }
                 startCommuicationService.putExtra(CommuicationService.TARGET_INET_ADDR_EXTRA, info.groupOwnerAddress.getHostAddress());
                 context.startService(startCommuicationService);
@@ -242,10 +247,7 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
     }
 
 
-    @Override
-    public void sendMessage(byte[] bytes, IClient iClient) {
 
-    }
 
     @Override
     public void disconnect() {
@@ -283,17 +285,16 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
             @Override
             public void onFailure(int i) {
                 Log.d(this.getClass().toString(), "onFailure when connecting...");
-
             }
         });
-
     }
 
-
+    @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         pcs.addPropertyChangeListener(listener);
     }
 
+    @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         pcs.removePropertyChangeListener(listener);
     }
@@ -324,6 +325,11 @@ public class WifiDirectControllerAndroid implements IP2PNetworkController {
         return devices;
     }
 
+
+    private void setOwner(boolean owner) {
+        pcs.firePropertyChange(OWNER_CHANGED_EVENT, this.isOwner, owner);
+        isOwner = owner;
+    }
     @Override
     public boolean isOwner() {
         return isOwner;

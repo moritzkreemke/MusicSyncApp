@@ -3,15 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/session_playlist"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/sessionplaylist" />
+        android:id="@+id/local_playlist"
+        android:icon="@drawable/ic_baseline_library_music_24"
+        android:title="@string/title_localplaylist" />
     <item
         android:id="@+id/pair_devices"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/ic_baseline_connect_without_contact_24"
         android:title="@string/pairdevices" />
-    <item android:id="@+id/local_playlist"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_localplaylist" />
+    <item
+        android:id="@+id/session_playlist"
+        android:icon="@drawable/ic_baseline_playlist_play_24"
+        android:title="@string/sessionplaylist" />
+
 
 </menu>

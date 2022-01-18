@@ -1,5 +1,7 @@
 package com.moritz.musicsyncapp.controller.sound.services;
 
+import static android.media.session.PlaybackState.ACTION_PLAY;
+
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -7,11 +9,25 @@ import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioTrack;
+import android.media.MediaMetadata;
+import android.media.MediaSession2;
+import android.media.session.MediaSession;
+import android.media.session.PlaybackState;
 import android.os.Binder;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import androidx.media.MediaBrowserServiceCompat;
 
 
 import com.moritz.musicsyncapp.AndroidMusicSyncFactory;
@@ -21,6 +37,7 @@ import com.moritz.musicsyncapp.model.track.IPlayableTrack;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -42,6 +59,7 @@ public class MusicPlaybackService extends Service {
         //called only once the service is created
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //always when startService(Intent) is called
@@ -50,15 +68,27 @@ public class MusicPlaybackService extends Service {
         //Intent notificationIntent = new Intent(this, MainActivity.class);
         //PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
+        MediaSession mediaSession = new MediaSession(getApplicationContext(), "LOL");
+        mediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS);
+        PlaybackState playbackState = new PlaybackState.Builder().setState(PlaybackState.STATE_PLAYING,
+                1, 1).build();
+        MediaMetadata metadataCompat = new MediaMetadata.Builder().putString("String", "String").build();
+        mediaSession.setPlaybackState(playbackState);
+        mediaSession.setMetadata(metadataCompat);
+        mediaSession.setActive(true);
 
-        Notification notification = new NotificationCompat.Builder(this, AndroidMusicSyncFactory.MUSIC_PLAYER_CHANNEL_ID)
-                .setContentTitle("Test")
-                .setContentText("Text")
+        Notification.MediaStyle mediaStyle = new Notification.MediaStyle();
+        mediaStyle.setMediaSession(mediaSession.getSessionToken());
+
+        Notification mediaNotfication = new Notification.Builder(this, AndroidMusicSyncFactory.MUSIC_PLAYER_CHANNEL_ID)
+                .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setSmallIcon(R.drawable.ic_android_black_24dp)
-              //  .setContentIntent(pendingIntent)
+                .setContentTitle("Track title")
+                .setContentText("Artist - Album")
+                .setStyle(mediaStyle)
                 .build();
 
-        startForeground(1, notification);
+        startForeground(1, mediaNotfication);
 
         return START_NOT_STICKY;
     }
@@ -122,7 +152,5 @@ public class MusicPlaybackService extends Service {
         }
 
     }
-
-
 
 }

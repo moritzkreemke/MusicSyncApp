@@ -71,6 +71,15 @@ public class PairDeviceFragment extends Fragment {
 
         textView_header = view.findViewById(R.id.text_view_pair_devcices_header);
         changeGroupOwnerBtn = view.findViewById(R.id.btn_become_group_leader);
+        changeGroupOwnerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AndroidMusicSyncFactory.get().getCommuicationClient().cancelConnect();
+
+                WifiDirectControllerAndroid controllerAndroid = (WifiDirectControllerAndroid) AndroidMusicSyncFactory.get().getNetworkController(null);
+                controllerAndroid.startCommuincation();
+            }
+        });
 
 
         RecyclerView availableDevicesRV = view.findViewById(R.id.recyler_view_all_devices);
@@ -143,14 +152,11 @@ public class PairDeviceFragment extends Fragment {
                         ISession session = (ISession) evt.getNewValue();
                         if(!session.exits()) {
                             textView_header.setText("please connect to other devices");
-                            //changeGroupOwnerBtn.setEnabled(false);
                         } else {
                             if(AndroidMusicSyncFactory.get().getNetworkController(null).isOwner()) {
                                 textView_header.setText("you are the DJ");
-                                changeGroupOwnerBtn.setEnabled(false);
                             } else {
                                 textView_header.setText("you are listener");
-                                changeGroupOwnerBtn.setEnabled(true);
                             }
                         }
                     }
@@ -173,14 +179,11 @@ public class PairDeviceFragment extends Fragment {
 
         if (!session.exits()) {
             textView_header.setText("Please connect to other devices");
-            changeGroupOwnerBtn.setEnabled(false);
         } else {
             if (AndroidMusicSyncFactory.get().getNetworkController(null).isOwner()) {
                 textView_header.setText("you are the DJ");
-                changeGroupOwnerBtn.setEnabled(false);
             } else {
                 textView_header.setText("you are the listener");
-                changeGroupOwnerBtn.setEnabled(true);
             }
         }
 

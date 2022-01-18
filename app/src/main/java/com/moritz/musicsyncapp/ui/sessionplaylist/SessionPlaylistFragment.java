@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.moritz.musicsyncapp.AndroidMusicSyncFactory;
 import com.moritz.musicsyncapp.R;
+import com.moritz.musicsyncapp.controller.p2pnetwork.WifiDirectControllerAndroid;
 import com.moritz.musicsyncapp.model.session.ISession;
 import com.moritz.musicsyncapp.model.track.ITrack;
 import com.moritz.musicsyncapp.model.track.LocalAndroidTrack;
@@ -38,6 +39,9 @@ public class SessionPlaylistFragment extends Fragment {
 
 
     private PropertyChangeListener sessionChanged;
+    private PropertyChangeListener p2pNetworkChanged;
+
+    private FloatingActionButton addSongsBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,7 +49,7 @@ public class SessionPlaylistFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_session_playlist, container, false);
 
-        FloatingActionButton addSongsBtn = view.findViewById(R.id.btn_add_song_to_session_playlist);
+        addSongsBtn = view.findViewById(R.id.btn_add_song_to_session_playlist);
         ActivityResultLauncher<Intent> activityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
@@ -96,14 +100,31 @@ public class SessionPlaylistFragment extends Fragment {
         };
         AndroidMusicSyncFactory.get().getSessionController().addSessionChangeListener(sessionChanged);
 
+        p2pNetworkChanged = new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(evt.getPropertyName().equals(WifiDirectControllerAndroid.OWNER_CHANGED_EVENT)) {
+                    isOwner((Boolean) evt.getNewValue());
+                }
+            }
+        };
+        isOwner(AndroidMusicSyncFactory.get().getNetworkController(null).isOwner());
+        AndroidMusicSyncFactory.get().getNetworkController(null).addPropertyChangeListener(p2pNetworkChanged);
+
         sessionPlaylistAdapter.setTrackList(Arrays.asList(AndroidMusicSyncFactory.get().getSessionController().getSession().getSessionPlaylist().getTracks()));
 
         return view;
+    }
+
+    private void isOwner (boolean isOwner)
+    {
+        addSongsBtn.setEnabled(isOwner);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         AndroidMusicSyncFactory.get().getSessionController().addSessionChangeListener(sessionChanged);
+        AndroidMusicSyncFactory.get().getNetworkController(null).removePropertyChangeListener(p2pNetworkChanged);
     }
 }

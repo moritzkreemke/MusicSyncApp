@@ -81,15 +81,17 @@ public class AndroidSnapdroidServerImpl implements ISnapdroidServer {
 
     @Override
     public void shutdown() {
-        serverProcess.destroy();
         try {
+        if(serverProcess != null)
+            serverProcess.destroy();
+
         if(pipe48_16_2_out != null) {
                 pipe48_16_2_out.close();
         }
         if(pipe44_16_2_out != null) {
             pipe44_16_2_out.close();
         }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         running.set(false);

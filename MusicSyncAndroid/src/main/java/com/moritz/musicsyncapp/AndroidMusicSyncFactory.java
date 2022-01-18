@@ -22,10 +22,10 @@ public class AndroidMusicSyncFactory implements IAndroidSyncFactory{
 
     public static final String MUSIC_PLAYER_CHANNEL_ID = "Music Player Channel ID";
     public static final String CHANNEL_ID = "Pair Notification Channel";
-    private static AndroidMusicSyncFactory _instance;
+    private static IAndroidSyncFactory _instance;
 
 
-    public static AndroidMusicSyncFactory get ()
+    public static IAndroidSyncFactory get ()
     {
         if(_instance == null)
             throw new RuntimeException("not initalized");
@@ -39,10 +39,18 @@ public class AndroidMusicSyncFactory implements IAndroidSyncFactory{
         _instance = new AndroidMusicSyncFactory(context);
     }
 
+    /**
+     * mostly for testing purposes
+     * @param androidSyncFactory factory which now will be used
+     */
+    public static void init (IAndroidSyncFactory androidSyncFactory) {
+        _instance = androidSyncFactory;
+    }
+
     private Context context;
     private IP2PNetworkController networkController;
 
-    private AndroidMusicSyncFactory (Context context)
+    AndroidMusicSyncFactory(Context context)
     {
         this.context = context;
         createNoticationChannel();

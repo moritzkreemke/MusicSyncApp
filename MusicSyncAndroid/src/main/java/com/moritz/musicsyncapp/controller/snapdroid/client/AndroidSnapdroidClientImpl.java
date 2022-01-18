@@ -57,7 +57,7 @@ public class AndroidSnapdroidClientImpl implements ISnapdroidClient {
                     String line;
                     try {
                         while ((line = bufferedReader.readLine()) != null) {
-                            Log.d(TAG, "run: " + line);
+                            //Log.d(TAG, "run: " + line);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

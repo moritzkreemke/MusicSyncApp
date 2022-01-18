@@ -58,19 +58,22 @@ public class CommuicationService extends Service {
                 //.setContentIntent(pendingIntent)
                 .build();
 
-        startForeground(1, notification);
+        startForeground(2, notification);
 
         boolean isServer = intent.getBooleanExtra(COMMUICATION_SERVICE_IS_SERVER_EXTRA, true);
 
         if(isServer) {
             AndroidMusicSyncFactory.get().getCommuicationServer().start(8080);
             AndroidMusicSyncFactory.get().getSnapdroidServer().start();
+        } else {
+            AndroidMusicSyncFactory.get().getCommuicationServer().stop();
+            AndroidMusicSyncFactory.get().getSnapdroidServer().shutdown();
         }
 
 
         String inet =  intent.getStringExtra(TARGET_INET_ADDR_EXTRA);
         try {
-            AndroidMusicSyncFactory.get().getCommuicationClient().connect(InetAddress.getByName(inet), 8080, 10, UUID.randomUUID().toString(), new OnConnectEvent() {
+            AndroidMusicSyncFactory.get().getCommuicationClient().connect(InetAddress.getByName(inet), 8080,  UUID.randomUUID().toString(), new OnConnectEvent() {
                 @Override
                 public void success() {
 
@@ -85,9 +88,6 @@ public class CommuicationService extends Service {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-
-
-
 
         return START_STICKY;
     }
